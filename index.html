@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTPFinance Pricing</title>
+    <script>
+        async function fetchPricingData() {
+            let sheetUrl = "https://docs.google.com/spreadsheets/d/1CF6xUUDaR02JXGgh14xnNmWswSeJPqGtz_O3i_oTJzg/gviz/tq?tqx=out:csv";
+            let response = await fetch(sheetUrl);
+            let csvText = await response.text();
+            let rows = csvText.split("\n").map(row => row.split(",").map(cell => cell.trim()));
+
+            let personalFinance = rows.slice(1, 21);
+            let smallBusiness = rows.slice(24, 43);
+            let mediumBusiness = rows.slice(46, 65);
+
+            document.getElementById("personal-finance").innerText = JSON.stringify(personalFinance, null, 2);
+            document.getElementById("small-business").innerText = JSON.stringify(smallBusiness, null, 2);
+            document.getElementById("medium-business").innerText = JSON.stringify(mediumBusiness, null, 2);
+        }
+
+        window.onload = fetchPricingData;
+    </script>
+</head>
+<body>
+    <h1>Pricing Data</h1>
+    <h2>Personal Finance</h2>
+    <pre id="personal-finance"></pre>
+
+    <h2>Small Business</h2>
+    <pre id="small-business"></pre>
+
+    <h2>Medium to Large Business</h2>
+    <pre id="medium-business"></pre>
+</body>
+</html>
